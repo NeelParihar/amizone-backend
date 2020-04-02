@@ -1,6 +1,6 @@
 from selenium import webdriver
 from selenium.webdriver.common.keys import Keys
-
+import userinfo
 
 #in the string/Quotation marks enter the path to where you downloaded the chromedriver.
 
@@ -11,11 +11,11 @@ browser.get('https://student.amizone.net/')
 
 #find the username field and enter the email example@yahoo.com.
 username = browser.find_elements_by_css_selector("input[name=_UserName]")
-username[0].send_keys('YOUR_USERNAME')
+username[0].send_keys(username)
 
 #find the password field and enter the password password.
 password = browser.find_elements_by_css_selector("input[name=_Password]")
-password[0].send_keys('YOUR_PASSWORD')
+password[0].send_keys(password)
 
 #find the login button and click it.
 loginButton = browser.find_elements_by_css_selector("button[type=submit]")
