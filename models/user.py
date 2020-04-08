@@ -4,17 +4,23 @@ from database.db import db
 class UserModel(db.Model):
     __tablename__ = "users"
     id = db.Column(db.Integer, primary_key=True)
-    username = db.Column(db.String(80))
+    username = db.Column(db.String(30))
     password = db.Column(db.String())
+    fullname = db.Column(db.String())
+    profilepic = db.Column(db.String())
 
-    def __init__(self, username, password):
+    def __init__(self, username, password,fullname,profilepic):
         self.username = username
         self.password = password
+        self.fullname = fullname
+        self.profilepic = profilepic
 
     def json(self):
         return {
             "id": self.id,
-            "username": self.username
+            "username": self.username,
+            "fullname": self.fullname,
+            "profilepic": self.profilepic
         }, 200
 
     # Method to save user to DB
