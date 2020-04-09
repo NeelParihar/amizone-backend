@@ -1,8 +1,9 @@
 from flask_restful import Resource, reqparse
 from flask_jwt_extended import create_access_token, create_refresh_token, jwt_refresh_token_required, get_jwt_identity, fresh_jwt_required
-
+from flask import jsonify
 from models.user import UserModel
-from scraper.scraper import login
+from models.attendance import AttendanceModel
+from scraper.scraper import amizonebot
 import hashlib
 
 _user_parser = reqparse.RequestParser()
@@ -73,9 +74,17 @@ class UserLogin(Resource):
                        "access_token": access_token,
                        "refresh_token": refresh_token
                    }, 200
-        scraperdata=login(data["username"],data["password"])
+        amizone = amizonebot()
+        scraperdata=amizone.login(usern=data["username"],passw=data["password"])
+        attend = amizone.getAttendance()
+        #amizone.getSchedule()
         user = UserModel(data["username"], hashlib.sha256(data["password"].encode("utf-8")).hexdigest(),scraperdata["fullname"],scraperdata["profilepic"])
         user.save_to_db()
+        i=0
+        while i < len(attend):
+            AttendanceModel(user_id=user.id,course_name=attend[i],percentage=attend[i+1],ratio=attend[i+2]).save_to_db()
+            i=i+3
+
         access_token = create_access_token(identity=user.id, fresh=True)  # Puts User ID as Identity in JWT
         refresh_token = create_refresh_token(identity=user.id)
 
@@ -84,6 +93,19 @@ class UserLogin(Resource):
             "access_token": access_token,
             "refresh_token": refresh_token
         },200
+
+class GetAttendance(Resource):
+    @fresh_jwt_required
+    def get(self,user_id):
+        attend = AttendanceModel.find_course_by_userid(user_id)
+        if attend:
+            all_attend = [{'CourseName':user.course_name,'Percentage':user.percentage,'Ratio':user.ratio} for user in attend]
+            print(all_attend)
+            return jsonify(all_attend)
+
+        return {
+                   "message": "User not found!"
+               }, 404
 
 
 class TokenRefresh(Resource):
