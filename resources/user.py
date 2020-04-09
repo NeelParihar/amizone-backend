@@ -100,7 +100,6 @@ class GetAttendance(Resource):
         attend = AttendanceModel.find_course_by_userid(user_id)
         if attend:
             all_attend = [{'CourseName':user.course_name,'Percentage':user.percentage,'Ratio':user.ratio} for user in attend]
-            print(all_attend)
             return jsonify(all_attend)
 
         return {
