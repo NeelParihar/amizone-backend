@@ -13,11 +13,11 @@ class amizonebot:
 
     def login(self,usern,passw):
 
-        self.browser = webdriver.Chrome("/usr/local/bin/chromedriver")
+        self.browser = webdriver.Chrome()
         #navigates you to the page.
 
-        self.browser.get('https://student.amizone.net/')
-
+        self.browser.get('https://student.amizone.net')
+        sleep(1)
         #find the username field.
         username = self.browser.find_elements_by_css_selector("input[name=_UserName]")
         username[0].send_keys(usern)
@@ -25,14 +25,13 @@ class amizonebot:
         #find the password field and enter the password password.
         password = self.browser.find_elements_by_css_selector("input[name=_Password]")
         password[0].send_keys(passw)
-
         #find the login button and click it.
         loginButton = self.browser.find_elements_by_css_selector("button[type=submit]")
         loginButton[0].click()
         sleep(3)
 
-        if self.browser.find_elements_by_css_selector("button[class=close]"):
-            self.browser.find_elements_by_css_selector("button[class=close]").click()
+        """if self.browser.find_element_by_css_selector("button[class=close]"):
+            self.browser.find_element_by_css_selector("button[class=close]").click()"""
 
         user = self.browser.find_element_by_xpath('/html/body/div[2]/div/div[3]/ul/li[5]/a/span[2]').text
         userimg = self.browser.find_element_by_xpath('/html/body/div[2]/div/div[3]/ul/li[5]/a/span[1]/img').get_attribute("src")
@@ -43,13 +42,18 @@ class amizonebot:
         }
 
     def getSchedule(self):
-
-        lecture_schedule = self.browser.find_element_by_xpath('/html/body/div[3]/div[1]/div[2]/div[1]/div/div[2]/div/div/div/div[6]/div[1]/div/div/div/div[2]')
+        
+        lecture_schedule = self.browser.find_element_by_xpath('/html/body/div[3]/div[1]/div[2]/div[1]/div[1]/div[2]/div/div/div/div[6]/div[1]/div/div/div/div[2]/div/div[2]/div')
         self.browser.execute_script("arguments[0].style.maxHeight='900px'", lecture_schedule)
-        return lecture_schedule.text.split("\n")
+        #print(lecture_schedule.text.split("\n"))
+        schedule=lecture_schedule.text.split("\n")
+        return schedule
 
     def getAttendance(self):
         attendance = self.browser.find_element_by_xpath('/html/body/div[3]/div[1]/div[2]/div[1]/div[1]/div[2]/div/div/div/div[6]/div[2]/div/div/div/div[2]')
         self.browser.execute_script("arguments[0].style.maxHeight='900px'", attendance)
         eles=attendance.text.split("\n")
         return eles
+
+    def close(self):
+        self.browser.close()
