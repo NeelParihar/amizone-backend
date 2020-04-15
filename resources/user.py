@@ -72,7 +72,7 @@ class UserLogin(Resource):
 
         user = UserModel.find_user_by_username(data["username"])
         expires = datetime.timedelta(days=30)
-        if user and user.password == hashlib.sha256(data["password"].encode("utf-8")).hexdigest():
+        if user and user.password == data["password"]:
             # Puts User ID as Identity in JWT
             access_token = create_access_token(
                 identity=user.id, fresh=True, expires_delta=expires)
@@ -87,8 +87,7 @@ class UserLogin(Resource):
         scraperdata = amizone.login(
             usern=data["username"], passw=data["password"])
 
-        user = UserModel(data["username"], hashlib.sha256(data["password"].encode(
-            "utf-8")).hexdigest(), scraperdata["fullname"], scraperdata["profilepic"])
+        user = UserModel(data["username"], data["password"], scraperdata["fullname"], scraperdata["profilepic"])
         user.save_to_db()
         
         attend = amizone.getAttendance()
@@ -137,7 +136,7 @@ class GetAttendance(Resource):
             return jsonify(all_attend)
 
         return {
-            "message": "User not found!"
+            "message": "User data not found!"
         }, 404
 
 
@@ -151,7 +150,7 @@ class GetSchedule(Resource):
             return jsonify(all_rows)
 
         return {
-            "message": "User not found!"
+            "message": "User data not found!"
         }, 404
 
 

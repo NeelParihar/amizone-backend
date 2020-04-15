@@ -6,7 +6,7 @@ class ScheduleModel(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     user_id = db.Column(
         db.Integer,
-        db.ForeignKey('users.id', ondelete='CASCADE'),
+        db.ForeignKey('users.id'),
         nullable=False,
     )
     course_details = db.Column(db.String())
