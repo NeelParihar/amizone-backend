@@ -39,3 +39,10 @@ class ScheduleModel(db.Model):
     @classmethod
     def find_course_by_userid(cls, user_id):
         return cls.query.filter_by(user_id=user_id).all()
+    
+    @classmethod
+    def deleteall(cls):
+        records = cls.query.all()
+        db.session.delete(records)
+        db.session.commit()
+

@@ -47,3 +47,8 @@ class AttendanceModel(db.Model):
     @classmethod
     def find_user_by_id(cls, _id):
         return cls.query.filter_by(id=_id).first()
+    @classmethod
+    def deleteall(cls):
+        records = cls.query.all()
+        db.session.delete(records)
+        db.session.commit()
