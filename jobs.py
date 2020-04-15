@@ -21,13 +21,11 @@ def timed_job():
             amizone.login(user.username, user.password)
             schedule = amizone.getSchedule()
             attend = amizone.getAttendance()
-            i = 0
+            i = 1
             while i < len(attend):
                 AttendanceModel(
-                    user_id=user.id, course_name=attend[i], percentage=attend[i+1], ratio=attend[i+2]).save_to_db()
+                    user_id=user.id, course_name=attend[i-1], percentage=attend[i+1-1], ratio=attend[i+2-1]).save_to_db()
                 i = i+3
-
-            
             i = 1
             while i < len(schedule):
                 ScheduleModel(
