@@ -10,7 +10,7 @@ import os
 class amizonebot:
 
     def login(self, usern, passw):
-        GOOGLE_CHROME_PATH = os.environ['GOOGLE_CHROME_PATH']
+        GOOGLE_CHROME_PATH = os.environ['GOOGLE_CHROME_BIN']
         CHROMEDRIVER_PATH = os.environ['CHROMEDRIVER_PATH']
         chrome_options = webdriver.ChromeOptions()
         chrome_options.add_argument('--disable-gpu')
