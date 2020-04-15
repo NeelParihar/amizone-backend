@@ -9,7 +9,7 @@ class UserModel(db.Model):
     fullname = db.Column(db.String())
     profilepic = db.Column(db.String())
 
-    def __init__(self, username, password,fullname,profilepic):
+    def __init__(self, username, password, fullname, profilepic):
         self.username = username
         self.password = password
         self.fullname = fullname

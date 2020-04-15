@@ -13,7 +13,7 @@ class AttendanceModel(db.Model):
     percentage = db.Column(db.String())
     ratio = db.Column(db.String())
 
-    def __init__(self, user_id, course_name,percentage,ratio):
+    def __init__(self, user_id, course_name, percentage, ratio):
         self.user_id = user_id
         self.course_name = course_name
         self.percentage = percentage
@@ -25,7 +25,7 @@ class AttendanceModel(db.Model):
             "user_id": self.user_id,
             "course_name": self.course_name,
             "percentage": self.percentage,
-            "ratio" : self.ratio
+            "ratio": self.ratio
         }, 200
 
     # Method to save user to DB

@@ -5,6 +5,7 @@ from models.user import UserModel
 from models.attendance import AttendanceModel
 from models.schedule import ScheduleModel
 from scraper.scraper import amizonebot
+import datetime
 import hashlib
 
 _user_parser = reqparse.RequestParser()
@@ -29,8 +30,8 @@ class User(Resource):
             return user.json()
 
         return {
-                   "message": "User not found!"
-               }, 404
+            "message": "User not found!"
+        }, 404
 
     @fresh_jwt_required
     def delete(self, user_id):
@@ -38,28 +39,24 @@ class User(Resource):
         if user:
             user.remove_from_db()
             return {
-                       "message": "User deleted!"
-                   }, 200
+                "message": "User deleted!"
+            }, 200
 
         return {
-                   "message": "User not found!"
-               }, 404
+            "message": "User not found!"
+        }, 404
 
 
-class UserRegister(Resource):
-    def post(self):
-        data = _user_parser.parse_args()
+class GetCurrentUser(Resource):
+    @fresh_jwt_required
+    def get(self):
+        user = UserModel.find_user_by_id(get_jwt_identity())
+        if user:
+            return user.json()
 
-        if UserModel.find_user_by_username(data["username"]):
-            return {
-                       "message": "User exists!"
-                   }, 400
-
-        #user = UserModel(data["username"], hashlib.sha256(data["password"].encode("utf-8")).hexdigest())
-        #user.save_to_db()
         return {
-            "message": "User {} created!".format(data["username"])
-        }
+            "message": "User not found!"
+        }, 404
 
 
 class UserLogin(Resource):
@@ -67,63 +64,89 @@ class UserLogin(Resource):
         data = _user_parser.parse_args()
 
         user = UserModel.find_user_by_username(data["username"])
-
+        expires = datetime.timedelta(days=30)
         if user and user.password == hashlib.sha256(data["password"].encode("utf-8")).hexdigest():
-            access_token = create_access_token(identity=user.id, fresh=True)  # Puts User ID as Identity in JWT
-            refresh_token = create_refresh_token(identity=user.id)  # Puts User ID as Identity in JWT
+            # Puts User ID as Identity in JWT
+            access_token = create_access_token(
+                identity=user.id, fresh=True, expires_delta=expires)
+            refresh_token = create_refresh_token(
+                identity=user.id)  # Puts User ID as Identity in JWT
             return {
-                       "access_token": access_token,
-                       "refresh_token": refresh_token
-                   }, 200
-        amizone = amizonebot()
-        scraperdata=amizone.login(usern=data["username"],passw=data["password"])
+                "access_token": access_token,
+                "refresh_token": refresh_token
+            }, 200
+        try:
 
-        attend = amizone.getAttendance()
-        user = UserModel(data["username"], hashlib.sha256(data["password"].encode("utf-8")).hexdigest(),scraperdata["fullname"],scraperdata["profilepic"])
-        user.save_to_db()
-        i=0
-        while i < len(attend):
-            AttendanceModel(user_id=user.id,course_name=attend[i],percentage=attend[i+1],ratio=attend[i+2]).save_to_db()
-            i=i+3
+            amizone = amizonebot()
+            scraperdata = amizone.login(
+                usern=data["username"], passw=data["password"])
 
-        schedule = amizone.getSchedule()
-        i=2
-        while i < len(schedule):
-            ScheduleModel(user_id=user.id,course_details=schedule[i],prof_name=schedule[i+1]).save_to_db()
-            i=i+2
+            attend = amizone.getAttendance()
+            user = UserModel(data["username"], hashlib.sha256(data["password"].encode(
+                "utf-8")).hexdigest(), scraperdata["fullname"], scraperdata["profilepic"])
+            user.save_to_db()
+            i = 0
 
-        access_token = create_access_token(identity=user.id, fresh=True)  # Puts User ID as Identity in JWT
+            while i < len(attend):
+                AttendanceModel(
+                    user_id=user.id, course_name=attend[i], percentage=attend[i+1], ratio=attend[i+2]).save_to_db()
+                i = i+3
+
+            schedule = amizone.getSchedule()
+            i = 1
+            while i < len(schedule):
+                ScheduleModel(
+                    user_id=user.id, course_details=schedule[i], prof_name=schedule[i+1]).save_to_db()
+                i = i+2
+
+            amizone.close()
+
+        except:
+            print(Exception)
+            return {
+                "message": "User not found!"
+            }, 404
+        finally:
+            amizone.close()
+        # Puts User ID as Identity in JWT
+        access_token = create_access_token(
+            identity=user.id, fresh=True, expires_delta=expires)
         refresh_token = create_refresh_token(identity=user.id)
 
         return {
             "message": "User {} created!".format(data["username"]),
             "access_token": access_token,
             "refresh_token": refresh_token
-        },200
+        }, 200
+
 
 class GetAttendance(Resource):
     @fresh_jwt_required
-    def get(self,user_id):
-        attend = AttendanceModel.find_course_by_userid(user_id)
+    def get(self):
+        attend = AttendanceModel.find_course_by_userid(get_jwt_identity())
         if attend:
-            all_attend = [{'CourseName':user.course_name,'Percentage':user.percentage,'Ratio':user.ratio} for user in attend]
+            all_attend = [{'CourseName': user.course_name,
+                           'Percentage': user.percentage, 'Ratio': user.ratio} for user in attend]
             return jsonify(all_attend)
 
         return {
-                   "message": "User not found!"
-               }, 404
+            "message": "User not found!"
+        }, 404
+
 
 class GetSchedule(Resource):
     @fresh_jwt_required
-    def get(self,user_id):
-        schedule = ScheduleModel.find_course_by_userid(user_id)
+    def get(self):
+        schedule = ScheduleModel.find_course_by_userid(get_jwt_identity())
         if schedule:
-            all_rows = [{'CourseDetails':user.course_details,'ProfDeatils':user.prof_name} for user in schedule]
+            all_rows = [{'CourseDetails': user.course_details,
+                         'ProfDeatils': user.prof_name} for user in schedule]
             return jsonify(all_rows)
 
         return {
-                   "message": "User not found!"
-               }, 404
+            "message": "User not found!"
+        }, 404
+
 
 class TokenRefresh(Resource):
     @jwt_refresh_token_required
@@ -131,5 +154,5 @@ class TokenRefresh(Resource):
         current_user_id = get_jwt_identity()  # Gets Identity from JWT
         new_token = create_access_token(identity=current_user_id, fresh=False)
         return {
-                   "access_token": new_token
-               }, 200 
+            "access_token": new_token
+        }, 200
