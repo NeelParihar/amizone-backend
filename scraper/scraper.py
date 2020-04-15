@@ -7,19 +7,17 @@ from selenium.webdriver.support import expected_conditions as ec
 from time import sleep
 import os
 # in the string/Quotation marks enter the path to where you downloaded the chromedriver.
-
-
 class amizonebot:
 
     def login(self, usern, passw):
         GOOGLE_CHROME_PATH = os.environ['GOOGLE_CHROME_BIN']
         CHROMEDRIVER_PATH = os.environ['CHROMEDRIVER_PATH']
         chrome_options = webdriver.ChromeOptions()
-        chrome_options.add_argument('--headless')
+        chrome_options.add_argument('--disable-gpu')
+        chrome_options.add_argument('--no-sandbox')
         chrome_options.add_argument('--disable-dev-shm-usage')
         chrome_options.binary_location = GOOGLE_CHROME_PATH
-        self.browser = webdriver.Chrome(
-            executable_path=CHROMEDRIVER_PATH, chrome_options=chrome_options)
+        self.browser = webdriver.Chrome(executable_path=CHROMEDRIVER_PATH, chrome_options=chrome_options)
         # navigates you to the page.
         #self.browser = webdriver.Chrome(chrome_options=chrome_options)
         self.browser.get('https://student.amizone.net')
