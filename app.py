@@ -1,16 +1,16 @@
 from flask import Flask, jsonify
 from flask_restful import Api
 from flask_jwt_extended import JWTManager
-
+import os
 from database.db import db
 from resources.user import User, UserLogin, GetAttendance, GetCurrentUser, GetSchedule, Index
 
 app = Flask(__name__)
-app.config["SQLALCHEMY_DATABASE_URI"] = "postgres://jfncuipbmptfyv:12dfaa5d6c0689f687d44b7cfe7c7e35245ab955523b8146c4deed8796f322c1@ec2-3-234-109-123.compute-1.amazonaws.com:5432/df9d3di7k6kd86"
-app.config["SQLALCHEMY_TRACK_MODIFICATIONS"] = False
 
-app.config["PROPAGATE_EXCEPTIONS"] = True
-app.secret_key = "v3ry_s3cr3t_k3y"
+app.config.from_object(os.environ['APP_SETTINGS'])
+app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
+
+
 api = Api(app)
 
 

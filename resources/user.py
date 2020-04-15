@@ -82,39 +82,37 @@ class UserLogin(Resource):
                 "access_token": access_token,
                 "refresh_token": refresh_token
             }, 200
-        try:
 
-            amizone = amizonebot()
-            scraperdata = amizone.login(
-                usern=data["username"], passw=data["password"])
+        amizone = amizonebot()
+        scraperdata = amizone.login(
+            usern=data["username"], passw=data["password"])
 
-            attend = amizone.getAttendance()
-            user = UserModel(data["username"], hashlib.sha256(data["password"].encode(
-                "utf-8")).hexdigest(), scraperdata["fullname"], scraperdata["profilepic"])
-            user.save_to_db()
-            i = 0
+        user = UserModel(data["username"], hashlib.sha256(data["password"].encode(
+            "utf-8")).hexdigest(), scraperdata["fullname"], scraperdata["profilepic"])
+        user.save_to_db()
+        i = 0
+        attend = amizone.getAttendance()
+        while i < len(attend):
+            AttendanceModel(
+                user_id=user.id, course_name=attend[i], percentage=attend[i+1], ratio=attend[i+2]).save_to_db()
+            i = i+3
 
-            while i < len(attend):
-                AttendanceModel(
-                    user_id=user.id, course_name=attend[i], percentage=attend[i+1], ratio=attend[i+2]).save_to_db()
-                i = i+3
+        schedule = amizone.getSchedule()
+        i = 1
+        while i < len(schedule):
+            ScheduleModel(
+                user_id=user.id, course_details=schedule[i], prof_name=schedule[i+1]).save_to_db()
+            i = i+2
 
-            schedule = amizone.getSchedule()
-            i = 1
-            while i < len(schedule):
-                ScheduleModel(
-                    user_id=user.id, course_details=schedule[i], prof_name=schedule[i+1]).save_to_db()
-                i = i+2
-
-        except:
-            print(Exception.__name__)
-            return {
-                "message": "User not found!"
-            }, 404
-        finally:
-            return {
-                "message": "User not found!"
-            }, 404
+        # except:
+        #     print(Exception.__name__)
+        #     return {
+        #         "message": "User not found!"
+        #     }, 404
+        # finally:
+        #     return {
+        #         "message": "User not found!"
+        #     }, 404
 
             # Puts User ID as Identity in JWT
         access_token = create_access_token(

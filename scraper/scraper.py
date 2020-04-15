@@ -35,16 +35,18 @@ class amizonebot:
         loginButton = self.browser.find_elements_by_css_selector(
             "button[type=submit]")
         loginButton[0].click()
-        sleep(3)
+        sleep(4)
 
         if self.browser.find_element_by_xpath("/html/body/div[3]/div[1]/div[2]/div[1]/div[2]/div/div/div[1]/button"):
-            self.browser.find_element_by_css_selector("/html/body/div[3]/div[1]/div[2]/div[1]/div[2]/div/div/div[1]/button").click()
+            self.browser.find_element_by_xpath(
+                "/html/body/div[3]/div[1]/div[2]/div[1]/div[2]/div/div/div[1]/button").click()
 
         user = self.browser.find_element_by_xpath(
             '/html/body/div[2]/div/div[3]/ul/li[5]/a/span[2]').text
         userimg = self.browser.find_element_by_xpath(
             '/html/body/div[2]/div/div[3]/ul/li[5]/a/span[1]/img').get_attribute("src")
         user = user.split("\n")
+        print(user)
         return {
             "fullname": user[0],
             "profilepic": userimg
@@ -57,11 +59,9 @@ class amizonebot:
         self.browser.execute_script(
             "arguments[0].style.maxHeight='900px'", lecture_schedule)
         # print(lecture_schedule.text.split("\n"))
-        if lecture_schedule.text.split("\n").isEmpty():
-            schedule = []
-        else:
-             schedule = lecture_schedule.text.split("\n")
-        
+
+        schedule = lecture_schedule.text.split("\n")
+
         return schedule
 
     def getAttendance(self):
@@ -69,9 +69,7 @@ class amizonebot:
             '/html/body/div[3]/div[1]/div[2]/div[1]/div[1]/div[2]/div/div/div/div[6]/div[2]/div/div/div/div[2]')
         self.browser.execute_script(
             "arguments[0].style.maxHeight='900px'", attendance)
-        if attendance.text.split("\n").isEmpty():
-            eles = []
-        else:
-             eles = attendance.text.split("\n")
-        return eles
-            
+
+        elements = attendance.text.split("\n")
+        print(elements)
+        return elements
