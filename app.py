@@ -2,12 +2,8 @@ from flask import Flask, jsonify
 from flask_restful import Api
 from flask_jwt_extended import JWTManager
 
-<<<<<<< HEAD
-=======
-from resources.user import User, GetCurrentUser, UserLogin, GetAttendance, GetSchedule
->>>>>>> 63fc6cd8b75f4cd18582b126c9eb1d5c5fd877ee
 
-from resources.user import User, UserLogin, GetAttendance, GetCurrentUser, GetSchedule
+from resources.user import User, UserLogin, GetAttendance, GetCurrentUser, GetSchedule, Index
 
 app = Flask(__name__)
 app.config["SQLALCHEMY_DATABASE_URI"] = "postgres://jfncuipbmptfyv:12dfaa5d6c0689f687d44b7cfe7c7e35245ab955523b8146c4deed8796f322c1@ec2-3-234-109-123.compute-1.amazonaws.com:5432/df9d3di7k6kd86"
@@ -59,7 +55,7 @@ def fresh_token_loader_callback():
         }, 401
     )
 
-
+api.add_resource(Index,"/")
 api.add_resource(User, "/user/<int:user_id>")
 api.add_resource(GetCurrentUser, "/user")
 api.add_resource(UserLogin, "/login")
@@ -69,15 +65,7 @@ api.add_resource(GetSchedule, "/schedule")
 if __name__ == '__main__':
     from database.db import db
     db.init_app(app)
-<<<<<<< HEAD
     @app.before_first_request
     def create_tables():
         db.create_all()
     app.run()
-=======
-
-    @app.before_first_request
-    def create_tables():
-        db.create_all()
-    app.run(host="0.0.0.0", port=5000, debug=True)
->>>>>>> 63fc6cd8b75f4cd18582b126c9eb1d5c5fd877ee

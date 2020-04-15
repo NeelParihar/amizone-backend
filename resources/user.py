@@ -21,7 +21,11 @@ _user_parser.add_argument(
     required=True,
     help="This field cannot be blank"
 )
-
+class Index(Resource):
+    def get(self):
+        return {
+                "message": "Hello world!"
+            }, 200
 
 class User(Resource):
     def get(self, user_id):

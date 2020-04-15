@@ -12,7 +12,7 @@ class ScheduleModel(db.Model):
     course_details = db.Column(db.String())
     prof_name = db.Column(db.String())
 
-    def __init__(self, user_id, course_details,prof_name):
+    def __init__(self, user_id, course_details, prof_name):
         self.user_id = user_id
         self.course_details = course_details
         self.prof_name = prof_name
