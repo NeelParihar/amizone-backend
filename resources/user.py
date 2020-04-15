@@ -107,7 +107,7 @@ class UserLogin(Resource):
                 i = i+2
 
         except:
-            print(Exception)
+            print(Exception.__name__)
             return {
                 "message": "User not found!"
             }, 404
