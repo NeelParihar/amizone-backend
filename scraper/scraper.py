@@ -24,7 +24,7 @@ class amizonebot:
             executable_path=CHROMEDRIVER_PATH, chrome_options=chrome_options)
 
         # navigates you to the page.
-        # self.browser = webdriver.Chrome()
+        #self.browser = webdriver.Chrome()
         self.browser.get('https://student.amizone.net')
         sleep(1)
         # find the username field.
@@ -75,4 +75,5 @@ class amizonebot:
             "arguments[0].style.maxHeight='900px'", attendance)
         elements = attendance.text.split("\n")
         print(elements)
+
         return elements
