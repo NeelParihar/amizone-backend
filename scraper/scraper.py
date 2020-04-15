@@ -42,9 +42,9 @@ class amizonebot:
         loginButton[0].click()
         sleep(4)
 
-        # if self.browser.find_element_by_xpath("/html/body/div[3]/div[1]/div[2]/div[1]/div[2]/div/div/div[1]/button"):
-        #     self.browser.find_element_by_xpath(
-        #         "/html/body/div[3]/div[1]/div[2]/div[1]/div[2]/div/div/div[1]/button").click()
+        if self.browser.find_element_by_xpath("/html/body/div[3]/div[1]/div[2]/div[1]/div[2]/div/div/div[1]/button"):
+            self.browser.find_element_by_xpath(
+                "/html/body/div[3]/div[1]/div[2]/div[1]/div[2]/div/div/div[1]/button").click()
 
         user = self.browser.find_element_by_xpath(
             '/html/body/div[2]/div/div[3]/ul/li[5]/a/span[2]').text
