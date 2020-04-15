@@ -21,11 +21,14 @@ _user_parser.add_argument(
     required=True,
     help="This field cannot be blank"
 )
+
+
 class Index(Resource):
     def get(self):
         return {
-                "message": "Hello world!"
-            }, 200
+            "message": "Hello world!"
+        }, 200
+
 
 class User(Resource):
     def get(self, user_id):
@@ -103,16 +106,17 @@ class UserLogin(Resource):
                     user_id=user.id, course_details=schedule[i], prof_name=schedule[i+1]).save_to_db()
                 i = i+2
 
-            amizone.close()
-
         except:
             print(Exception)
             return {
                 "message": "User not found!"
             }, 404
         finally:
-            amizone.close()
-        # Puts User ID as Identity in JWT
+            return {
+                "message": "User not found!"
+            }, 404
+
+            # Puts User ID as Identity in JWT
         access_token = create_access_token(
             identity=user.id, fresh=True, expires_delta=expires)
         refresh_token = create_refresh_token(identity=user.id)

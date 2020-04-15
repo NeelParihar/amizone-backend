@@ -68,6 +68,3 @@ class amizonebot:
             "arguments[0].style.maxHeight='900px'", attendance)
         eles = attendance.text.split("\n")
         return eles
-
-    def close(self):
-        self.browser.close()
