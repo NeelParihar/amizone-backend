@@ -90,8 +90,9 @@ class UserLogin(Resource):
         user = UserModel(data["username"], hashlib.sha256(data["password"].encode(
             "utf-8")).hexdigest(), scraperdata["fullname"], scraperdata["profilepic"])
         user.save_to_db()
-        i = 0
+        
         attend = amizone.getAttendance()
+        i=0
         while i < len(attend):
             AttendanceModel(
                 user_id=user.id, course_name=attend[i], percentage=attend[i+1], ratio=attend[i+2]).save_to_db()

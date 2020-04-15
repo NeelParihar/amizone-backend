@@ -7,6 +7,8 @@ from selenium.webdriver.support import expected_conditions as ec
 from time import sleep
 import os
 # in the string/Quotation marks enter the path to where you downloaded the chromedriver.
+
+
 class amizonebot:
 
     def login(self, usern, passw):
@@ -18,9 +20,11 @@ class amizonebot:
         chrome_options.add_argument('--no-sandbox')
         chrome_options.add_argument('--disable-dev-shm-usage')
         chrome_options.binary_location = GOOGLE_CHROME_PATH
-        self.browser = webdriver.Chrome(executable_path=CHROMEDRIVER_PATH, chrome_options=chrome_options)
+        self.browser = webdriver.Chrome(
+            executable_path=CHROMEDRIVER_PATH, chrome_options=chrome_options)
+
         # navigates you to the page.
-        #self.browser = webdriver.Chrome(chrome_options=chrome_options)
+        # self.browser = webdriver.Chrome()
         self.browser.get('https://student.amizone.net')
         sleep(1)
         # find the username field.
@@ -38,16 +42,15 @@ class amizonebot:
         loginButton[0].click()
         sleep(4)
 
-        if self.browser.find_element_by_xpath("/html/body/div[3]/div[1]/div[2]/div[1]/div[2]/div/div/div[1]/button"):
-            self.browser.find_element_by_xpath(
-                "/html/body/div[3]/div[1]/div[2]/div[1]/div[2]/div/div/div[1]/button").click()
+        # if self.browser.find_element_by_xpath("/html/body/div[3]/div[1]/div[2]/div[1]/div[2]/div/div/div[1]/button"):
+        #     self.browser.find_element_by_xpath(
+        #         "/html/body/div[3]/div[1]/div[2]/div[1]/div[2]/div/div/div[1]/button").click()
 
         user = self.browser.find_element_by_xpath(
             '/html/body/div[2]/div/div[3]/ul/li[5]/a/span[2]').text
         userimg = self.browser.find_element_by_xpath(
             '/html/body/div[2]/div/div[3]/ul/li[5]/a/span[1]/img').get_attribute("src")
         user = user.split("\n")
-        print(user)
         return {
             "fullname": user[0],
             "profilepic": userimg
@@ -70,7 +73,6 @@ class amizonebot:
             '/html/body/div[3]/div[1]/div[2]/div[1]/div[1]/div[2]/div/div/div/div[6]/div[2]/div/div/div/div[2]')
         self.browser.execute_script(
             "arguments[0].style.maxHeight='900px'", attendance)
-
         elements = attendance.text.split("\n")
         print(elements)
         return elements
