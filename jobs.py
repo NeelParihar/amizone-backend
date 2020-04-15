@@ -13,8 +13,8 @@ sched = BlockingScheduler()
 def timed_job():
     with app.app_context():
         users = UserModel.query.all()
-        AttendanceModel.deleteall()
-        ScheduleModel.deleteall()
+        AttendanceModel.query.delete()
+        ScheduleModel.query.delete()
         for user in users:
             amizone = amizonebot()
             amizone.login(user.usern,user.passw)
