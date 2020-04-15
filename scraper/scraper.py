@@ -40,7 +40,7 @@ class amizonebot:
         loginButton = self.browser.find_elements_by_css_selector(
             "button[type=submit]")
         loginButton[0].click()
-        sleep(4)
+        sleep(5)
 
         if self.browser.find_element_by_xpath("/html/body/div[3]/div[1]/div[2]/div[1]/div[2]/div/div/div[1]/button"):
             self.browser.find_element_by_xpath(
@@ -65,7 +65,7 @@ class amizonebot:
         # print(lecture_schedule.text.split("\n"))
 
         schedule = lecture_schedule.text.split("\n")
-
+        print(schedule)
         return schedule
 
     def getAttendance(self):

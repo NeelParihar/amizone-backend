@@ -15,9 +15,11 @@ def timed_job():
         users = UserModel.query.all()
         AttendanceModel.query.delete()
         ScheduleModel.query.delete()
+        amizone = amizonebot()
         for user in users:
-            amizone = amizonebot()
+            
             amizone.login(user.username, user.password)
+            schedule = amizone.getSchedule()
             attend = amizone.getAttendance()
             i = 0
             while i < len(attend):
@@ -25,7 +27,7 @@ def timed_job():
                     user_id=user.id, course_name=attend[i], percentage=attend[i+1], ratio=attend[i+2]).save_to_db()
                 i = i+3
 
-            schedule = amizone.getSchedule()
+            
             i = 1
             while i < len(schedule):
                 ScheduleModel(
