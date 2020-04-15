@@ -2,6 +2,10 @@ from flask import Flask, jsonify
 from flask_restful import Api
 from flask_jwt_extended import JWTManager
 
+<<<<<<< HEAD
+=======
+from resources.user import User, GetCurrentUser, UserLogin, GetAttendance, GetSchedule
+>>>>>>> 63fc6cd8b75f4cd18582b126c9eb1d5c5fd877ee
 
 from resources.user import User, UserLogin, GetAttendance, GetCurrentUser, GetSchedule
 
@@ -65,7 +69,15 @@ api.add_resource(GetSchedule, "/schedule")
 if __name__ == '__main__':
     from database.db import db
     db.init_app(app)
+<<<<<<< HEAD
     @app.before_first_request
     def create_tables():
         db.create_all()
     app.run()
+=======
+
+    @app.before_first_request
+    def create_tables():
+        db.create_all()
+    app.run(host="0.0.0.0", port=5000, debug=True)
+>>>>>>> 63fc6cd8b75f4cd18582b126c9eb1d5c5fd877ee
