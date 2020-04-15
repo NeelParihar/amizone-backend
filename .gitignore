@@ -3,3 +3,4 @@ env/
 userinfo.py
 __pycache__
 data.db
+.env
