@@ -4,6 +4,7 @@ from selenium.webdriver.chrome.options import Options
 from selenium.webdriver.support.ui import WebDriverWait
 from selenium.webdriver.common.by import By
 from selenium.webdriver.support import expected_conditions as ec
+from selenium.common.exceptions import NoSuchElementException
 from time import sleep
 import os
 # in the string/Quotation marks enter the path to where you downloaded the chromedriver.
@@ -43,7 +44,7 @@ class amizonebot:
             "button[type=submit]")
         loginButton[0].click()
         sleep(4)
-        if self.browser.find_element_by_xpath("/html/body/div[3]/div[1]/div[2]/div[1]/div[2]/div/div/div[1]/button"):
+        if self.check_exists_by_xpath("/html/body/div[3]/div[1]/div[2]/div[1]/div[2]/div/div/div[1]/button"):
             self.browser.find_element_by_xpath(
                 "/html/body/div[3]/div[1]/div[2]/div[1]/div[2]/div/div/div[1]/button").click()
 
@@ -77,3 +78,10 @@ class amizonebot:
         elements = attendance.text.split("\n")
         print(elements)
         return elements
+
+    def check_exists_by_xpath(self, xpath):
+        try:
+            self.browser.find_element_by_xpath(xpath)
+        except NoSuchElementException:
+            return False
+        return True
