@@ -28,7 +28,7 @@ class amizonebot:
         # option = webdriver.ChromeOptions()
         # option.add_argument("--disable-popup")
         # self.browser = webdriver.Chrome()
-        self.browser.fullscreen_window()
+        #self.browser.fullscreen_window()
         self.browser.get('https://student.amizone.net')
         
         sleep(1)
