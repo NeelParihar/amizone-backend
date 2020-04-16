@@ -31,6 +31,7 @@ def schedule():
         users = UserModel.query.all()
         ScheduleModel.query.delete()
         amizone = amizonebot()
+
         for user in users:
             amizone.login(user.username, user.password)
             schedule = amizone.getSchedule()
