@@ -15,7 +15,6 @@ class amizonebot:
         GOOGLE_CHROME_PATH = os.environ['GOOGLE_CHROME_BIN']
         CHROMEDRIVER_PATH = os.environ['CHROMEDRIVER_PATH']
         chrome_options = webdriver.ChromeOptions()
-        chrome_options.add_argument('--headless')
         chrome_options.add_argument('--disable-gpu')
         chrome_options.add_argument('--no-sandbox')
         chrome_options.add_argument('--disable-dev-shm-usage')
@@ -24,7 +23,9 @@ class amizonebot:
             executable_path=CHROMEDRIVER_PATH, chrome_options=chrome_options)
 
         # navigates you to the page.
-        # self.browser = webdriver.Chrome()
+        # option = webdriver.ChromeOptions()
+        # option.add_argument("--disable-popup")
+        # self.browser = webdriver.Chrome(chrome_options=option)
         self.browser.get('https://student.amizone.net')
         sleep(1)
         # find the username field.
@@ -40,8 +41,7 @@ class amizonebot:
         loginButton = self.browser.find_elements_by_css_selector(
             "button[type=submit]")
         loginButton[0].click()
-        sleep(5)
-
+        sleep(4)
         if self.browser.find_element_by_xpath("/html/body/div[3]/div[1]/div[2]/div[1]/div[2]/div/div/div[1]/button"):
             self.browser.find_element_by_xpath(
                 "/html/body/div[3]/div[1]/div[2]/div[1]/div[2]/div/div/div[1]/button").click()
