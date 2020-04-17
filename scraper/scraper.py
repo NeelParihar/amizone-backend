@@ -63,7 +63,7 @@ class amizonebot:
     def getSchedule(self):
 
         lecture_schedule = self.browser.find_element_by_xpath(
-            '/html/body/div[3]/div[1]/div[2]/div[1]/div[1]/div[2]/div/div/div/div[6]/div[1]/div/div/div/div[2]/div/div[2]/div')
+            '/html/body/div[3]/div[1]/div[2]/div[1]/div/div[2]/div/div/div/div[6]/div[1]/div/div/div/div[2]')
         self.browser.execute_script(
             "arguments[0].style.maxHeight='900px'", lecture_schedule)
         # print(lecture_schedule.text.split("\n"))
