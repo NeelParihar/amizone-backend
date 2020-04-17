@@ -23,14 +23,14 @@ class amizonebot:
         chrome_options.binary_location = GOOGLE_CHROME_PATH
         self.browser = webdriver.Chrome(
             executable_path=CHROMEDRIVER_PATH, chrome_options=chrome_options)
-
+        self.browser.maximize_window()
         # navigates you to the page.
         # option = webdriver.ChromeOptions()
         # option.add_argument("--disable-popup")
         # self.browser = webdriver.Chrome()
-        #self.browser.fullscreen_window()
+        # self.browser.fullscreen_window()
         self.browser.get('https://student.amizone.net')
-        
+
         sleep(1)
         # find the username field.
         username = self.browser.find_elements_by_css_selector(
