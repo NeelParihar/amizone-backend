@@ -35,7 +35,7 @@ def schedule():
         for user in users:
             amizone.login(user.username, user.password)
             schedule = amizone.getSchedule()
-            i = 1
+            i = 2
             while i < len(schedule):
                 ScheduleModel(
                     user_id=user.id, course_details=schedule[i], prof_name=schedule[i+1]).save_to_db()

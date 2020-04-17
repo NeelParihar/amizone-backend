@@ -87,19 +87,19 @@ class UserLogin(Resource):
         scraperdata = amizone.login(
             usern=data["username"], passw=data["password"])
 
-        user = UserModel(data["username"], data["password"], scraperdata["fullname"], scraperdata["profilepic"])
+        user = UserModel(data["username"], data["password"],
+                         scraperdata["fullname"], scraperdata["profilepic"])
         user.save_to_db()
-        
+
         attend = amizone.getAttendance()
         schedule = amizone.getSchedule()
-        i=1
+        i = 1
         while i < len(attend):
             AttendanceModel(
                 user_id=user.id, course_name=attend[i-1], percentage=attend[i+1-1], ratio=attend[i+2-1]).save_to_db()
             i = i+3
 
-        
-        i = 1
+        i = 2
         while i < len(schedule):
             ScheduleModel(
                 user_id=user.id, course_details=schedule[i], prof_name=schedule[i+1]).save_to_db()
